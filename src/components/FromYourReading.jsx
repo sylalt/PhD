@@ -8,29 +8,8 @@ function selectRandomQuote(quotes) {
   return quotes[Math.floor(Math.random() * quotes.length)];
 }
 
-function getPaperUrl(paperUrl) {
-  if (typeof paperUrl !== 'string' || !paperUrl.trim()) {
-    return null;
-  }
-
-  const value = paperUrl.trim();
-  const doi = value.match(/^(?:doi:\s*)?(10\.\d{4,9}\/\S+)$/i);
-
-  if (doi) {
-    return `https://doi.org/${doi[1].split('/').map(encodeURIComponent).join('/')}`;
-  }
-
-  try {
-    const url = new URL(value);
-    return url.protocol === 'http:' || url.protocol === 'https:' ? url.href : null;
-  } catch {
-    return null;
-  }
-}
-
 function FromYourReading({ quotes = [], status = 'ready' }) {
   const quote = useMemo(() => selectRandomQuote(quotes), [quotes]);
-  const paperUrl = quote ? getPaperUrl(quote.paperUrl || quote.doi) : null;
 
   return (
     <article className="card dashboard-card dashboard-reading-card">
@@ -45,11 +24,6 @@ function FromYourReading({ quotes = [], status = 'ready' }) {
             {[quote.authors, quote.year, quote.page && `p. ${quote.page}`].filter(Boolean).join(' · ')}
           </p>
           <p className="reading-paper-title">{quote.paperTitle}</p>
-          {paperUrl && (
-            <a className="reading-paper-link" href={paperUrl} target="_blank" rel="noreferrer">
-              View paper <span aria-hidden="true">↗</span>
-            </a>
-          )}
         </>
       ) : (
         <p className="empty reading-empty">{status === 'loading' ? 'Loading quotations…' : status === 'error' ? 'Quotations could not be loaded from Google Sheets.' : 'No quotations yet. Add a quote to the QUOTES tab in Google Sheets.'}</p>
