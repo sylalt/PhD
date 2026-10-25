@@ -1,5 +1,6 @@
+import { supabase } from './supabase';
+
 export const GOOGLE_SHEETS_API = 'https://script.google.com/macros/s/AKfycbzrX9ILnV2CAUEywzkYn4iNASyx9XGfwbVSjg1CYuq9ennyf2XcbO9_j1Uc0gJDDumPZA/exec';
-export const SUPABASE_TASKS_API = 'https://ouspoawbetddlhojskxz.supabase.co/functions/v1/tasks';
 
 async function request(url, options = {}) {
   const response = await fetch(url, options);
@@ -20,9 +21,10 @@ function taskRecord(value) {
 }
 
 export async function loadTasks(signal) {
-  const rows = await request(SUPABASE_TASKS_API, { signal });
-  if (!Array.isArray(rows)) throw new Error('Supabase returned an unexpected tasks response.');
-  return rows.map(taskRecord);
+  const { data, error } = await supabase.from('tasks').select('*')
+    .order('created_at', { ascending: false }).abortSignal(signal);
+  if (error) throw new Error(error.message);
+  return data.map(taskRecord);
 }
 
 export async function loadPapers(signal) {
@@ -39,9 +41,20 @@ export async function loadPapers(signal) {
   });
 }
 
-const writeTask = (method, body) => request(SUPABASE_TASKS_API, {
-  method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
-});
-export const createTask = async (task) => taskRecord(await writeTask('POST', task));
-export const patchTask = async (id, updates) => taskRecord(await writeTask('PATCH', { id, ...updates }));
-export const removeTask = (id) => writeTask('DELETE', { id });
+export async function createTask(task) {
+  const { data, error } = await supabase.from('tasks').insert(task).select().single();
+  if (error) throw new Error(error.message);
+  return taskRecord(data);
+}
+
+export async function patchTask(id, updates) {
+  const { data, error } = await supabase.from('tasks').update(updates).eq('id', id).select().single();
+  if (error) throw new Error(error.message);
+  return taskRecord(data);
+}
+
+export async function removeTask(id) {
+  const { data, error } = await supabase.from('tasks').delete().eq('id', id).select('id').single();
+  if (error) throw new Error(error.message);
+  return data;
+}
