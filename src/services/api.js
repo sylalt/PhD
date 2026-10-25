@@ -41,6 +41,25 @@ export async function loadPapers(signal) {
   });
 }
 
+export async function loadQuotes(signal) {
+  const url = new URL(GOOGLE_SHEETS_API);
+  url.searchParams.set('sheet', 'QUOTES');
+  const payload = await request(url.href, { signal });
+  // Require the sheet name so an older deployment returning papers cannot
+  // silently masquerade as an empty quotations list.
+  if (payload?.sheet !== 'QUOTES' || !Array.isArray(payload.rows)) {
+    throw new Error(payload?.error || 'The Google Sheets API must expose the QUOTES tab. Deploy google-apps-script/Code.gs using the setup instructions in the repository.');
+  }
+  return payload.rows.map((row) => ({
+    quote: String(row.Quote ?? row.QUOTE ?? '').trim(),
+    authors: String(row.Authors ?? row['Author(s)'] ?? '').trim(),
+    year: String(row.Year ?? '').trim(),
+    paperTitle: String(row['Paper Title'] ?? row.Title ?? '').trim(),
+    paperUrl: String(row['DOI/Link'] ?? row['DOI / URL'] ?? '').trim(),
+    page: String(row.Page ?? row['Quote Page'] ?? '').trim()
+  })).filter((row) => row.quote);
+}
+
 export async function createTask(task) {
   const { data, error } = await supabase.from('tasks').insert(task).select().single();
   if (error) throw new Error(error.message);
