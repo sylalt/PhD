@@ -34,7 +34,7 @@ function DashboardPage({
           <div className="progress dashboard-progress" role="progressbar" aria-label="Overall PhD progress" aria-valuenow={overallProgress} aria-valuemin="0" aria-valuemax="100">
             <div style={{ width: `${overallProgress}%` }} />
           </div>
-          <p className="muted">Overall progress across your four-year PhD roadmap, weighted by the relative importance of goals, milestones and tasks.</p>
+          <p className="muted">Your PhD journey at a glance, with progress reflecting the importance of each goal, milestone and task.</p>
           <button type="button" className="button secondary" onClick={() => onViewProgress()}>
             View PhD roadmap →
           </button>
