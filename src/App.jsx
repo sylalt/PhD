@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { loadTasks, loadPapers, loadQuotes, createTask, patchTask, removeTask } from './services/api';
+import { loadTasks, loadPapers, loadQuotes } from './services/api';
 import Sidebar from './components/Sidebar';
 import DashboardPage from './pages/DashboardPage';
 import PapersPage from './pages/PapersPage';
@@ -226,17 +226,16 @@ function App() {
   const [quotes, setQuotes] = useState([]);
   const [roadmap, setRoadmap] = useState(() => getStoredValue(STORAGE_KEYS.roadmap, defaultRoadmap));
   const [taskFilter, setTaskFilter] = useState('all');
+  const [priorityFilter, setPriorityFilter] = useState('all');
+  const [categoryFilter, setCategoryFilter] = useState('all');
   const [paperSearch, setPaperSearch] = useState('');
   const [paperStatus, setPaperStatus] = useState('');
   const [paperStream, setPaperStream] = useState('');
-  const [taskDialogOpen, setTaskDialogOpen] = useState(false);
   const [meetingDialogOpen, setMeetingDialogOpen] = useState(false);
-  const [taskForm, setTaskForm] = useState({ title: '', description: '', due_date: '', status: 'todo' });
   const [meetingForm, setMeetingForm] = useState({ title: '', date: '', agenda: '' });
 
   const [remoteState, setRemoteState] = useState({ tasks: 'loading', papers: 'loading', quotes: 'loading' });
   const [remoteErrors, setRemoteErrors] = useState({});
-  const [taskBusy, setTaskBusy] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -253,15 +252,6 @@ function App() {
     }
     return () => controller.abort();
   }, []);
-
-  const mutateTask = async (operation) => {
-    if (taskBusy || remoteState.tasks !== 'ready') return;
-    setTaskBusy(true);
-    setRemoteErrors((errors) => ({ ...errors, taskWrite: '' }));
-    try { await operation(); }
-    catch (error) { setRemoteErrors((errors) => ({ ...errors, taskWrite: error.message })); }
-    finally { setTaskBusy(false); }
-  };
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.meetings, JSON.stringify(meetings));
@@ -289,7 +279,10 @@ function App() {
     });
   }, [paperSearch, paperStatus, paperStream, papers]);
 
-  const outstandingTasks = useMemo(() => tasks.filter((task) => task.status !== 'done'), [tasks]);
+  const outstandingTasks = useMemo(
+    () => tasks.filter((task) => task.status.toLowerCase() !== 'done'),
+    [tasks]
+  );
 
   const nextMeeting = useMemo(() => {
     const now = new Date();
@@ -298,29 +291,11 @@ function App() {
 
   const filteredTasks = useMemo(() => {
     return tasks.filter((task) => {
-      if (taskFilter === 'all') return true;
-      return task.status === taskFilter;
+      return (taskFilter === 'all' || task.status === taskFilter)
+        && (priorityFilter === 'all' || task.priority === priorityFilter)
+        && (categoryFilter === 'all' || task.category === categoryFilter);
     });
-  }, [taskFilter, tasks]);
-
-  const addTask = (event) => {
-    event.preventDefault();
-    if (!taskForm.title.trim()) return;
-
-    const item = {
-      title: taskForm.title.trim(),
-      description: taskForm.description.trim(),
-      due_date: taskForm.due_date || null,
-      status: taskForm.status
-    };
-
-    mutateTask(async () => {
-    const created = await createTask(item);
-    setTasks((current) => [created, ...current]);
-    setTaskForm({ title: '', description: '', due_date: '', status: 'todo' });
-    setTaskDialogOpen(false);
-    });
-  };
+  }, [categoryFilter, priorityFilter, taskFilter, tasks]);
 
   const addMeeting = (event) => {
     event.preventDefault();
@@ -342,21 +317,6 @@ function App() {
 
   const deleteMeeting = (meetingId) => {
     setMeetings((current) => current.filter((meeting) => meeting.id !== meetingId));
-  };
-
-  const updateTaskStatus = (taskId, status) => {
-    mutateTask(async () => {
-      const updated = await patchTask(taskId, { status });
-      setTasks((current) => current.map((task) => (task.id === taskId ? updated : task)));
-    });
-  };
-
-  const deleteTask = (taskId) => {
-    if (!window.confirm('Delete this task?')) return;
-    mutateTask(async () => {
-      await removeTask(taskId);
-      setTasks((current) => current.filter((task) => task.id !== taskId));
-    });
   };
 
   const toggleMilestone = (yearId, goalId, milestoneId, checked) => {
@@ -488,17 +448,15 @@ function App() {
 
         {activeSection === 'tasks' && (
           <TasksPage
-            disabled={taskBusy || remoteState.tasks !== 'ready'}
+            loading={remoteState.tasks === 'loading'}
+            tasks={tasks}
             taskFilter={taskFilter}
-            taskForm={taskForm}
-            taskDialogOpen={taskDialogOpen}
             filteredTasks={filteredTasks}
             onTaskFilter={setTaskFilter}
-            onTaskDialogToggle={setTaskDialogOpen}
-            onTaskFormChange={(field, value) => setTaskForm((current) => ({ ...current, [field]: value }))}
-            onAddTask={addTask}
-            onUpdateTaskStatus={updateTaskStatus}
-            onDeleteTask={deleteTask}
+            priorityFilter={priorityFilter}
+            categoryFilter={categoryFilter}
+            onPriorityFilter={setPriorityFilter}
+            onCategoryFilter={setCategoryFilter}
           />
         )}
 

@@ -1,5 +1,3 @@
-import { supabase } from './supabase';
-
 export const GOOGLE_SHEETS_API = 'https://script.google.com/macros/s/AKfycbzTi_991e6AwPOciCg-HTz0MJ0Ab6JAnPkWrCIBURTlyjHsO51GCVkLcKo3obTel1QJtg/exec';
 
 async function request(url, options = {}) {
@@ -13,18 +11,24 @@ async function request(url, options = {}) {
   return response.json();
 }
 
-function taskRecord(value) {
-  if (!value || Array.isArray(value) || value.id == null || typeof value.title !== 'string') {
-    throw new Error('Supabase returned an unexpected task response. Reload before retrying a save.');
-  }
-  return value;
-}
-
 export async function loadTasks(signal) {
-  const { data, error } = await supabase.from('tasks').select('*')
-    .order('created_at', { ascending: false }).abortSignal(signal);
-  if (error) throw new Error(error.message);
-  return data.map(taskRecord);
+  const url = new URL(GOOGLE_SHEETS_API);
+  url.searchParams.set('sheet', 'TASKS');
+  const payload = await request(url.href, { signal });
+  if (payload?.sheet !== 'TASKS' || !Array.isArray(payload.rows)) {
+    throw new Error(payload?.error || 'The Google Sheets API must expose the TASKS tab with the required task columns.');
+  }
+
+  return payload.rows.map((row, index) => ({
+    id: `${index}-${String(row.Task ?? '').trim()}`,
+    title: String(row.Task ?? '').trim(),
+    status: String(row.Status ?? '').trim(),
+    priority: String(row.Priority ?? '').trim(),
+    due_date: String(row['Due date'] ?? '').trim(),
+    category: String(row.Category ?? '').trim(),
+    milestone: String(row.Milestone ?? '').trim(),
+    notes: String(row.Notes ?? '').trim()
+  })).filter((task) => task.title);
 }
 
 export async function loadPapers(signal) {
@@ -58,22 +62,4 @@ export async function loadQuotes(signal) {
     paperUrl: String(row['DOI/Link'] ?? row['DOI / URL'] ?? '').trim(),
     page: String(row.Page ?? row['Quote Page'] ?? '').trim()
   })).filter((row) => row.quote);
-}
-
-export async function createTask(task) {
-  const { data, error } = await supabase.from('tasks').insert(task).select().single();
-  if (error) throw new Error(error.message);
-  return taskRecord(data);
-}
-
-export async function patchTask(id, updates) {
-  const { data, error } = await supabase.from('tasks').update(updates).eq('id', id).select().single();
-  if (error) throw new Error(error.message);
-  return taskRecord(data);
-}
-
-export async function removeTask(id) {
-  const { data, error } = await supabase.from('tasks').delete().eq('id', id).select('id').single();
-  if (error) throw new Error(error.message);
-  return data;
 }

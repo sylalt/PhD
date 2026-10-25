@@ -3,7 +3,7 @@
 function doGet(e) {
   try {
     var requestedSheet = e && e.parameter && e.parameter.sheet;
-    if (requestedSheet && requestedSheet !== 'QUOTES' && requestedSheet !== 'Lit review') {
+    if (requestedSheet && requestedSheet !== 'QUOTES' && requestedSheet !== 'TASKS' && requestedSheet !== 'Lit review') {
       throw new Error('Unknown sheet requested.');
     }
     var sheetName = requestedSheet || 'Lit review';
@@ -16,6 +16,13 @@ function doGet(e) {
     if (sheetName === 'QUOTES' && headers.indexOf('Quote') === -1 && headers.indexOf('QUOTE') === -1) {
       throw new Error('QUOTES needs a Quote column in the first row.');
     }
+    if (sheetName === 'TASKS') {
+      var requiredHeaders = ['Task', 'Status', 'Priority', 'Due date', 'Category', 'Milestone', 'Notes'];
+      var missingHeaders = requiredHeaders.filter(function (header) { return headers.indexOf(header) === -1; });
+      if (missingHeaders.length) {
+        throw new Error('TASKS is missing required columns: ' + missingHeaders.join(', ') + '.');
+      }
+    }
     var rows = values.filter(function (row) {
       return row.some(function (cell) { return String(cell).trim() !== ''; });
     }).map(function (row) {
@@ -26,7 +33,9 @@ function doGet(e) {
       return record;
     });
     // Preserve the papers API's existing array response.
-    return sheetsJson_(sheetName === 'QUOTES' ? { sheet: 'QUOTES', rows: rows } : rows);
+    return sheetsJson_(sheetName === 'QUOTES' || sheetName === 'TASKS'
+      ? { sheet: sheetName, rows: rows }
+      : rows);
   } catch (error) {
     return sheetsJson_({ error: error.message });
   }

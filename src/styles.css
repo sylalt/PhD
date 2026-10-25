@@ -403,6 +403,88 @@ h3 {
   margin-bottom: 18px;
 }
 
+.task-filters > select {
+  flex: 1 1 180px;
+  min-width: 0;
+}
+
+.task-table-card {
+  min-width: 0;
+}
+
+.task-table {
+  min-width: 1040px;
+}
+
+.task-table th,
+.task-table td {
+  padding: 13px 14px;
+}
+
+.task-table td {
+  color: #424852;
+}
+
+.task-table td:first-child {
+  min-width: 190px;
+  color: var(--color-text);
+}
+
+.task-table .task-notes {
+  min-width: 220px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.task-sheet-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 9px;
+  background: #f0efed;
+  color: #535962;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.task-sheet-badge.status-done,
+.task-sheet-badge.status-completed {
+  color: var(--color-sage-ink);
+  background: var(--color-sage);
+}
+
+.task-sheet-badge.status-in-progress {
+  color: var(--color-blue-ink);
+  background: var(--color-blue);
+}
+
+.task-sheet-badge.status-on-hold {
+  color: var(--color-peach-ink);
+  background: var(--color-peach);
+}
+
+.task-sheet-badge.status-not-started {
+  color: var(--color-lavender-ink);
+  background: var(--color-lavender);
+}
+
+.task-sheet-badge.priority-high {
+  color: #8d3c32;
+  background: #f8e7e3;
+}
+
+.task-sheet-badge.priority-medium {
+  color: var(--color-peach-ink);
+  background: var(--color-peach);
+}
+
+.task-sheet-badge.priority-low {
+  color: var(--color-sage-ink);
+  background: var(--color-sage);
+}
+
 .section-tools input,
 .section-tools select,
 .task-form input,
@@ -1219,6 +1301,10 @@ tbody tr:last-child td {
 
   .section-tools {
     flex-wrap: wrap;
+  }
+
+  .task-filters > select {
+    flex-basis: 100%;
   }
 }
 

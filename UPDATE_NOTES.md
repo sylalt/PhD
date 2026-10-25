@@ -1,10 +1,8 @@
-# Supabase login and direct tasks connection
+# Supabase login and Google Sheets tasks
 
-This version uses the new Supabase project dnzakxazxnwqlyympaws and its public publishable key. No password or secret key is included. The old tasks Edge Function is no longer used by the React app.
+Supabase is used for account authentication only. Task records are loaded read-only from the `TASKS` tab in the same Google spreadsheet used for papers and quotes. No task changes are sent to Supabase or GitHub.
 
-## Supabase setup
-
-Run supabase/tasks-access.sql in the new project's SQL Editor if you have not already run the table and policy queries. It permits only user 6e9fd2bb-70b5-4e82-b056-a4ae02e340bc to manage tasks. Keep RLS enabled. Sign in using the email/password you created in Authentication > Users.
+Sign in using the email/password created in Supabase Authentication > Users.
 
 ## Update GitHub
 
@@ -23,12 +21,12 @@ The deployment workflow must be at .github/workflows/deploy-pages.yml, not the r
 
 ## Behavior
 
-The workspace requires login. Supabase RLS enforces task access independently of the login screen. Tasks read and write directly to the tasks table with the signed-in user's session. The login session uses sessionStorage, survives refresh in the same tab and ends when that tab's storage is cleared. Task and paper records are not stored in browser localStorage.
+The workspace requires login. The login session uses sessionStorage, survives refresh in the same tab and ends when that tab's storage is cleared. Papers, quotes and tasks are read from the Google Sheets Apps Script deployment. The Tasks page filters by status, priority and category; add or edit task rows directly in the spreadsheet using the columns documented in google-apps-script/README.md. Redeploy the Apps Script after updating its `doGet` handler to enable the `TASKS` tab route.
 
-Google Sheets still supplies papers. Meetings and roadmap retain their existing localStorage behavior; they have not been migrated to Supabase. Existing data is not deleted or migrated. The new Supabase database initially has no tasks.
+Meetings and the roadmap retain their existing localStorage behavior. Existing Supabase task rows are not deleted or migrated; they are no longer read by the app.
 
 The unused historical root app.js remains for reference and is not imported by the React app.
 
 ## Validation
 
-Production Vite build passed. Mocked Supabase SDK checks passed for password login, bearer-token task requests, table selection, create/update/delete, ID filters, database errors, Sheets column mapping and sign out. No real credentials were used and no live records were changed. Browser UI verification could not run because the browser download failed in this environment. Live login and database-policy verification remain to be checked after deployment.
+Verify the production Vite build and Apps Script responses for the original papers route and the `QUOTES` and `TASKS` routes after deployment. The task endpoint must return a `TASKS` sheet name and rows matching the required column headers. No spreadsheet records are changed by the app.
