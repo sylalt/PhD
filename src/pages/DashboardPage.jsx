@@ -3,6 +3,8 @@ import FromYourReading from '../components/FromYourReading';
 
 function DashboardPage({
   papers,
+  quotes,
+  quotesStatus,
   outstandingTasks,
   nextMeeting,
   overallProgress,
@@ -71,7 +73,7 @@ function DashboardPage({
           </div>
         </article>
 
-        <FromYourReading />
+        <FromYourReading quotes={quotes} status={quotesStatus} />
       </div>
     </section>
   );
