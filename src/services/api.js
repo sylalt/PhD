@@ -1,6 +1,6 @@
 import { supabase } from './supabase';
 
-export const GOOGLE_SHEETS_API = 'https://script.google.com/macros/s/AKfycbzrX9ILnV2CAUEywzkYn4iNASyx9XGfwbVSjg1CYuq9ennyf2XcbO9_j1Uc0gJDDumPZA/exec';
+export const GOOGLE_SHEETS_API = 'https://script.google.com/macros/s/AKfycbzTi_991e6AwPOciCg-HTz0MJ0Ab6JAnPkWrCIBURTlyjHsO51GCVkLcKo3obTel1QJtg/exec';
 
 async function request(url, options = {}) {
   const response = await fetch(url, options);
