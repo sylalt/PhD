@@ -1,7 +1,7 @@
 function Sidebar({ navItems, activeSection, onSelect }) {
   return (
     <aside className="sidebar">
-      <div className="brand">Silvia PhD</div>
+      <div className="brand">Sílvia PhD</div>
       <nav aria-label="Main navigation">
         {navItems.map((item) => (
           <button
