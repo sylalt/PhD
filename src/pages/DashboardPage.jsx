@@ -1,6 +1,11 @@
 import StatCard from '../components/StatCard';
 import FromYourReading from '../components/FromYourReading';
 
+function formatDashboardDate(date) {
+  const [year, month, day] = date.split('-');
+  return `${day}/${month}/${year}`;
+}
+
 function DashboardPage({
   papers,
   quotes,
@@ -42,7 +47,7 @@ function DashboardPage({
           {nextMeeting ? (
             <div className="dashboard-meeting">
               <strong>{nextMeeting.title}</strong>
-              <time className="dashboard-date-badge meeting-date" dateTime={nextMeeting.date}>{nextMeeting.date}</time>
+              <time className="dashboard-date-badge meeting-date" dateTime={nextMeeting.date}>{formatDashboardDate(nextMeeting.date)}</time>
               <div className="muted">{nextMeeting.agenda}</div>
             </div>
           ) : (
