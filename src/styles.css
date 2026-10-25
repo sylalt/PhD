@@ -1314,5 +1314,3 @@ tbody tr:last-child td {
 .login-card fieldset { border: 0; padding: 0; margin: 24px 0 0; display: grid; gap: 12px; min-width: 0; }
 .login-card input { width: 100%; box-sizing: border-box; }
 .login-card button { margin-top: 12px; }
-.account-bar { position: relative; z-index: 2; margin-left: 248px; padding: 12px 32px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: flex-end; background: #fff; border-bottom: 1px solid #e6e9ed; }
-@media (max-width: 900px) { .account-bar { margin-left: 0; padding: 12px; } }

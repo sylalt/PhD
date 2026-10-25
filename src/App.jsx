@@ -449,7 +449,7 @@ function App() {
         </header>
 
 
-        {Object.entries(remoteErrors).map(([key, message]) => message && (
+        {Object.entries(remoteErrors).filter(([key]) => key !== 'quotes').map(([key, message]) => message && (
           <p className="connection-error" role="alert" key={key}>{key}: {message} Reload the page to retry loading.</p>
         ))}
 

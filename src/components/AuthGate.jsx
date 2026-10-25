@@ -47,14 +47,7 @@ export default function AuthGate({ children }) {
   if (!ready) return <main className="login-screen"><p role="status">Checking your session…</p></main>;
 
   if (session?.user.id === OWNER_USER_ID) {
-    return <>
-      <div className="account-bar">
-        <span>{session.user.email}</span>
-        <button className="button secondary" disabled={busy} onClick={signOut}>Sign out</button>
-        {error && <span role="alert">{error}</span>}
-      </div>
-      {children}
-    </>;
+    return children;
   }
 
   if (session) {
