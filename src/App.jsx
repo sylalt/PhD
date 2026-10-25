@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { loadTasks, loadPapers, createTask, patchTask, removeTask } from './services/api';
+import { loadTasks, loadPapers, loadQuotes, createTask, patchTask, removeTask } from './services/api';
 import Sidebar from './components/Sidebar';
 import DashboardPage from './pages/DashboardPage';
 import PapersPage from './pages/PapersPage';
@@ -217,6 +217,7 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [meetings, setMeetings] = useState(() => getStoredValue(STORAGE_KEYS.meetings, defaultMeetings));
   const [papers, setPapers] = useState([]);
+  const [quotes, setQuotes] = useState([]);
   const [roadmap, setRoadmap] = useState(() => getStoredValue(STORAGE_KEYS.roadmap, defaultRoadmap));
   const [taskFilter, setTaskFilter] = useState('all');
   const [paperSearch, setPaperSearch] = useState('');
@@ -227,13 +228,13 @@ function App() {
   const [taskForm, setTaskForm] = useState({ title: '', description: '', due_date: '', status: 'todo' });
   const [meetingForm, setMeetingForm] = useState({ title: '', date: '', agenda: '' });
 
-  const [remoteState, setRemoteState] = useState({ tasks: 'loading', papers: 'loading' });
+  const [remoteState, setRemoteState] = useState({ tasks: 'loading', papers: 'loading', quotes: 'loading' });
   const [remoteErrors, setRemoteErrors] = useState({});
   const [taskBusy, setTaskBusy] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
-    for (const [key, loader, setter] of [['tasks', loadTasks, setTasks], ['papers', loadPapers, setPapers]]) {
+    for (const [key, loader, setter] of [['tasks', loadTasks, setTasks], ['papers', loadPapers, setPapers], ['quotes', loadQuotes, setQuotes]]) {
       loader(controller.signal).then((items) => {
         if (controller.signal.aborted) return;
         setter(items);
@@ -455,6 +456,8 @@ function App() {
         {activeSection === 'dashboard' && (
           <DashboardPage
             papers={papers}
+            quotes={quotes}
+            quotesStatus={remoteState.quotes}
             outstandingTasks={outstandingTasks}
             nextMeeting={nextMeeting}
             overallProgress={overallProgress}

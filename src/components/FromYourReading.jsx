@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import exampleQuotes from '../data/exampleQuotes';
+import { useMemo } from 'react';
 
 function selectRandomQuote(quotes) {
   if (!quotes.length) {
@@ -29,8 +28,8 @@ function getPaperUrl(paperUrl) {
   }
 }
 
-function FromYourReading({ quotes = exampleQuotes }) {
-  const [quote] = useState(() => selectRandomQuote(quotes));
+function FromYourReading({ quotes = [], status = 'ready' }) {
+  const quote = useMemo(() => selectRandomQuote(quotes), [quotes]);
   const paperUrl = quote ? getPaperUrl(quote.paperUrl || quote.doi) : null;
 
   return (
@@ -43,7 +42,7 @@ function FromYourReading({ quotes = exampleQuotes }) {
         <>
           <blockquote className="reading-quote">{quote.quote}</blockquote>
           <p className="reading-attribution">
-            {quote.authors} · {quote.year}
+            {[quote.authors, quote.year, quote.page && `p. ${quote.page}`].filter(Boolean).join(' · ')}
           </p>
           <p className="reading-paper-title">{quote.paperTitle}</p>
           {paperUrl && (
@@ -53,7 +52,7 @@ function FromYourReading({ quotes = exampleQuotes }) {
           )}
         </>
       ) : (
-        <p className="empty reading-empty">No quotations available yet.</p>
+        <p className="empty reading-empty">{status === 'loading' ? 'Loading quotations…' : status === 'error' ? 'Quotations could not be loaded from Google Sheets.' : 'No quotations yet. Add a quote to the QUOTES tab in Google Sheets.'}</p>
       )}
 
     </article>
