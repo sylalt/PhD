@@ -22,7 +22,7 @@ function ProgressPage({
   const nextMilestone = useMemo(() => {
     for (const year of roadmap) {
       for (const goal of year.goals || []) {
-        const milestone = (goal.milestones || []).find((item) => !item.completed);
+        const milestone = (goal.milestones || []).find((item) => getMilestoneProgress(item) < 100);
         if (milestone) return milestone;
       }
     }

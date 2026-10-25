@@ -164,52 +164,58 @@ function getTaskProgress(status) {
   }
 }
 
-function getMilestoneProgress(milestone) {
-  if (!milestone.tasks?.length) return milestone.completed ? 100 : 0;
+function getProgressWeight(item) {
+  const weight = Number(item.weight);
+  return Number.isFinite(weight) && weight > 0 ? weight : 1;
+}
 
-  const totalWeight = milestone.tasks.reduce((sum, task) => sum + Number(task.weight || 1), 0);
+function getMilestoneProgress(milestone) {
+  if (milestone.completed) return 100;
+  if (!milestone.tasks?.length) return 0;
+
+  const totalWeight = milestone.tasks.reduce((sum, task) => sum + getProgressWeight(task), 0);
   const weightedProgress = milestone.tasks.reduce((sum, task) => {
-    const taskWeight = Number(task.weight || 1);
+    const taskWeight = getProgressWeight(task);
     return sum + taskWeight * getTaskProgress(task.status || 'todo');
   }, 0);
 
-  return Math.round((weightedProgress / totalWeight) * 100);
+  return Math.round(weightedProgress / totalWeight);
 }
 
 function getGoalProgress(goal) {
   if (!goal.milestones?.length) return 0;
 
-  const totalWeight = goal.milestones.reduce((sum, milestone) => sum + Number(milestone.weight || 1), 0);
+  const totalWeight = goal.milestones.reduce((sum, milestone) => sum + getProgressWeight(milestone), 0);
   const weightedProgress = goal.milestones.reduce((sum, milestone) => {
-    const weight = Number(milestone.weight || 1);
+    const weight = getProgressWeight(milestone);
     return sum + weight * getMilestoneProgress(milestone);
   }, 0);
 
-  return Math.round((weightedProgress / totalWeight) * 100);
+  return Math.round(weightedProgress / totalWeight);
 }
 
 function getYearProgress(year) {
   if (!year.goals?.length) return 0;
 
-  const totalWeight = year.goals.reduce((sum, goal) => sum + Number(goal.weight || 1), 0);
+  const totalWeight = year.goals.reduce((sum, goal) => sum + getProgressWeight(goal), 0);
   const weightedProgress = year.goals.reduce((sum, goal) => {
-    const weight = Number(goal.weight || 1);
+    const weight = getProgressWeight(goal);
     return sum + weight * getGoalProgress(goal);
   }, 0);
 
-  return Math.round((weightedProgress / totalWeight) * 100);
+  return Math.round(weightedProgress / totalWeight);
 }
 
 function getOverallProgress(roadmap) {
   if (!roadmap.length) return 0;
 
-  const totalWeight = roadmap.reduce((sum, year) => sum + Number(year.weight || 1), 0);
+  const totalWeight = roadmap.reduce((sum, year) => sum + getProgressWeight(year), 0);
   const weightedProgress = roadmap.reduce((sum, year) => {
-    const weight = Number(year.weight || 1);
+    const weight = getProgressWeight(year);
     return sum + weight * getYearProgress(year);
   }, 0);
 
-  return Math.round((weightedProgress / totalWeight) * 100);
+  return Math.round(weightedProgress / totalWeight);
 }
 
 function App() {
@@ -412,10 +418,11 @@ function App() {
             ...goal,
             milestones: goal.milestones.map((milestone) => {
               if (milestone.id !== milestoneId) return milestone;
+              const tasks = milestone.tasks.map((task) => (task.id === taskId ? { ...task, status } : task));
               return {
                 ...milestone,
-                tasks: milestone.tasks.map((task) => (task.id === taskId ? { ...task, status } : task)),
-                completed: status === 'done'
+                tasks,
+                completed: tasks.length > 0 && tasks.every((task) => task.status === 'done')
               };
             })
           };
