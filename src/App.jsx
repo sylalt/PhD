@@ -447,9 +447,7 @@ function App() {
           </div>
         </header>
 
-        <div className="connection-status" role="status">
-          Tasks (Supabase): {remoteState.tasks} · Papers (Google Sheets): {remoteState.papers}
-        </div>
+
         {Object.entries(remoteErrors).map(([key, message]) => message && (
           <p className="connection-error" role="alert" key={key}>{key}: {message} Reload the page to retry loading.</p>
         ))}
