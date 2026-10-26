@@ -43,7 +43,7 @@ function TasksPage({
             <table className="task-table">
               <thead>
                 <tr>
-                  <th scope="col">Task</th>
+                  <th scope="col" aria-label="Task"></th>
                   <th scope="col">Status</th>
                   <th scope="col">Priority</th>
                   <th scope="col">Due date</th>
