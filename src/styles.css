@@ -415,12 +415,22 @@ h3 {
   min-width: 0;
 }
 
+.paper-table-card {
+  min-width: 0;
+}
+
 .task-table {
   min-width: 760px;
 }
 
+.paper-table {
+  min-width: 900px;
+}
+
 .task-table th,
-.task-table td {
+.task-table td,
+.paper-table th,
+.paper-table td {
   padding: 13px 14px;
 }
 
@@ -436,6 +446,67 @@ h3 {
 .task-table td:first-child {
   min-width: 190px;
   color: var(--color-text);
+}
+
+.paper-table td {
+  color: #424852;
+}
+
+.paper-table .paper-year,
+.paper-table .paper-status {
+  text-align: center;
+}
+
+.paper-table .paper-year {
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.paper-table .paper-title {
+  min-width: 240px;
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.paper-table .paper-title a {
+  color: inherit;
+  text-decoration-color: #c9c1d5;
+  text-underline-offset: 3px;
+}
+
+.paper-table .paper-title a:hover {
+  color: var(--color-lavender-ink);
+}
+
+.paper-table .paper-author,
+.paper-table .paper-metadata {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.paper-table .paper-author {
+  min-width: 140px;
+}
+
+.paper-table .paper-metadata {
+  color: var(--color-muted);
+}
+
+.paper-status-badge.status-unread {
+  color: var(--color-lavender-ink);
+  background: var(--color-lavender);
+}
+
+.paper-status-badge.status-reading {
+  color: var(--color-blue-ink);
+  background: var(--color-blue);
+}
+
+.paper-status-badge.status-read {
+  color: var(--color-sage-ink);
+  background: var(--color-sage);
 }
 
 .task-title {

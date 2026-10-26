@@ -32,21 +32,19 @@ function PapersPage({
         </select>
       </div>
 
-      <div className="card">
+      <div className="card paper-table-card">
         <div className="card-head">
           <h2>Papers</h2>
-          
-<a
-  href="https://docs.google.com/spreadsheets/d/107Ej9K3Ztxl6EWqd7k8WtdaXhmXNRnT0tmeBni4V5iM/edit"
-  target="_blank"
-  rel="noreferrer"
->
-  Open Google Sheet ↗
-</a>
-
+          <a
+            href="https://docs.google.com/spreadsheets/d/107Ej9K3Ztxl6EWqd7k8WtdaXhmXNRnT0tmeBni4V5iM/edit"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Open Google Sheet ↗
+          </a>
         </div>
         <div className="table-wrap">
-          <table>
+          <table className="paper-table">
             <thead>
               <tr>
                 <th>Author(s)</th>
@@ -61,18 +59,22 @@ function PapersPage({
               {filteredPapers.length ? (
                 filteredPapers.map((paper, index) => (
                   <tr key={`${paper.title}-${index}`}>
-                    <td>{paper.author}</td>
-                    <td>{paper.year}</td>
-                    <td>
+                    <td className="paper-author">{paper.author}</td>
+                    <td className="paper-year">{paper.year}</td>
+                    <td className="paper-title">
                       {paper.link && paper.link !== '#' ? (
                         <a href={paper.link} target="_blank" rel="noreferrer">{paper.title}</a>
                       ) : (
                         paper.title
                       )}
                     </td>
-                    <td>{paper.journal}</td>
-                    <td>{paper.stream}</td>
-                    <td>{paper.read}</td>
+                    <td className="paper-metadata">{paper.journal}</td>
+                    <td className="paper-metadata">{paper.stream}</td>
+                    <td className="paper-status">
+                      <span className={`task-sheet-badge paper-status-badge${paper.read ? ` status-${paper.read.toLowerCase()}` : ''}`}>
+                        {paper.read}
+                      </span>
+                    </td>
                   </tr>
                 ))
               ) : (
