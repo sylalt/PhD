@@ -58,10 +58,10 @@ function TasksPage({
                         <details className="task-description-details">
                           <summary><span className="task-title">{task.title}</span></summary>
                           <div className="task-description-content">
-                            {task.milestone && (
-                              <span className="task-milestone"><span>Milestone:</span> {task.milestone}</span>
-                            )}
                             {task.notes && <p className="task-description">{task.notes}</p>}
+                            {task.milestone && (
+                              <span className="task-milestone">{task.milestone.split(' - ')[0]}</span>
+                            )}
                           </div>
                         </details>
                       ) : (
