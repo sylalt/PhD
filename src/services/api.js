@@ -27,7 +27,7 @@ export async function loadTasks(signal) {
     due_date: String(row['Due date'] ?? '').trim(),
     category: String(row.Category ?? '').trim(),
     milestone: String(row.Milestone ?? '').trim(),
-    notes: String(row['Notes(description)'] ?? '').trim()
+    notes: String(row['Notes (description)'] ?? row['Notes(description)'] ?? row.Notes ?? '').trim()
   })).filter((task) => task.title);
 }
 

@@ -7,17 +7,17 @@ function doGet(e) {
       throw new Error('Unknown sheet requested.');
     }
     var sheetName = requestedSheet || 'Lit review';
-    var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-    if (!spreadsheet) throw new Error('Bind this script to the papers spreadsheet.');
+    var spreadsheet = SpreadsheetApp.openById('107Ej9K3Ztxl6EWqd7k8WtdaXhmXNRnT0tmeBni4V5iM');
+    if (!spreadsheet) throw new Error('Unable to open the PhD starting spreadsheet.');
     var sheet = spreadsheet.getSheetByName(sheetName);
     if (!sheet) throw new Error('Missing tab: ' + sheetName);
     var values = sheet.getDataRange().getDisplayValues();
-    var headers = values.shift() || [];
+    var headers = (values.shift() || []).map(function (header) { return String(header).trim(); });
     if (sheetName === 'QUOTES' && headers.indexOf('Quote') === -1 && headers.indexOf('QUOTE') === -1) {
       throw new Error('QUOTES needs a Quote column in the first row.');
     }
     if (sheetName === 'TASKS') {
-      var requiredHeaders = ['Task', 'Status', 'Priority', 'Due date', 'Category', 'Milestone', 'Notes(description)'];
+      var requiredHeaders = ['Task', 'Status', 'Priority', 'Due date', 'Category', 'Milestone', 'Notes (description)'];
       var missingHeaders = requiredHeaders.filter(function (header) { return headers.indexOf(header) === -1; });
       if (missingHeaders.length) {
         throw new Error('TASKS is missing required columns: ' + missingHeaders.join(', ') + '.');
