@@ -35,13 +35,6 @@ function PapersPage({
       <div className="card paper-table-card">
         <div className="card-head">
           <h2>Papers</h2>
-          <a
-            href="https://docs.google.com/spreadsheets/d/107Ej9K3Ztxl6EWqd7k8WtdaXhmXNRnT0tmeBni4V5iM/edit"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Open Google Sheet ↗
-          </a>
         </div>
         <div className="table-wrap">
           <table className="paper-table">
@@ -50,9 +43,8 @@ function PapersPage({
                 <th>Author(s)</th>
                 <th>Year</th>
                 <th>Title</th>
-                <th>Journal/Book</th>
                 <th>Literature stream</th>
-                <th>Read?</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -68,7 +60,6 @@ function PapersPage({
                         paper.title
                       )}
                     </td>
-                    <td className="paper-metadata">{paper.journal}</td>
                     <td className="paper-metadata">{paper.stream}</td>
                     <td className="paper-status">
                       <span className={`task-sheet-badge paper-status-badge${paper.read ? ` status-${paper.read.toLowerCase()}` : ''}`}>
@@ -79,7 +70,7 @@ function PapersPage({
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" className="empty">No papers found.</td>
+                  <td colSpan="5" className="empty">No papers found.</td>
                 </tr>
               )}
             </tbody>

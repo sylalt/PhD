@@ -424,7 +424,12 @@ h3 {
 }
 
 .paper-table {
-  min-width: 900px;
+  min-width: 760px;
+}
+
+.paper-table th {
+  letter-spacing: normal;
+  text-transform: none;
 }
 
 .task-table th,
