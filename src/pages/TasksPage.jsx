@@ -4,6 +4,13 @@ const statusOptions = ['Not started', 'In progress', 'On hold', 'Done'];
 const priorityOptions = ['High', 'Medium', 'Low'];
 const categoryOptions = ['Research', 'Writing', 'Training', 'Administration', 'Events'];
 
+function getMilestoneColorClass(milestone) {
+  const milestoneNumber = Number(milestone.match(/^M(\d+)/i)?.[1]);
+  if (!milestoneNumber) return '';
+
+  return `task-milestone-color-${((milestoneNumber - 1) % 4) + 1}`;
+}
+
 function TasksPage({
   loading,
   tasks,
@@ -56,7 +63,9 @@ function TasksPage({
                     <td>
                       <div className="task-title-row">
                         {task.milestone && (
-                          <span className="task-milestone">{task.milestone.split(' - ')[0]}</span>
+                          <span className={`task-milestone ${getMilestoneColorClass(task.milestone)}`}>
+                            {task.milestone.split(' - ')[0]}
+                          </span>
                         )}
                         {task.notes ? (
                           <details className="task-description-details">

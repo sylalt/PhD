@@ -581,6 +581,30 @@ h3 {
   overflow-wrap: anywhere;
 }
 
+.task-milestone-color-1 {
+  border-color: #eeeaf4;
+  background: #f7f5fa;
+  color: var(--color-lavender-ink);
+}
+
+.task-milestone-color-2 {
+  border-color: #e9f0ea;
+  background: #f5f8f5;
+  color: var(--color-sage-ink);
+}
+
+.task-milestone-color-3 {
+  border-color: #e8eef5;
+  background: #f5f8fb;
+  color: var(--color-blue-ink);
+}
+
+.task-milestone-color-4 {
+  border-color: #f3eae2;
+  background: #faf6f2;
+  color: var(--color-peach-ink);
+}
+
 .task-sheet-badge {
   display: inline-flex;
   align-items: center;
