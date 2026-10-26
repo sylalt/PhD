@@ -1,4 +1,4 @@
-import formatDate from '../utils/date';
+import { formatTaskDate } from '../utils/date';
 
 const statusOptions = ['Not started', 'In progress', 'On hold', 'Done'];
 const priorityOptions = ['High', 'Medium', 'Low'];
@@ -68,7 +68,7 @@ function TasksPage({
                     </td>
                     <td><span className={`task-sheet-badge status-${task.status.toLowerCase().replace(/\s+/g, '-')}`}>{task.status}</span></td>
                     <td><span className={`task-sheet-badge priority-${task.priority.toLowerCase()}`}>{task.priority}</span></td>
-                    <td>{formatDate(task.due_date)}</td>
+                    <td>{formatTaskDate(task.due_date)}</td>
                     <td>{task.category}</td>
                   </tr>
                 )) : (

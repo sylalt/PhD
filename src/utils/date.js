@@ -29,4 +29,19 @@ function formatDate(value, shortYear = false) {
   return `${String(day).padStart(2, '0')}-${String(month).padStart(2, '0')}-${formattedYear}`;
 }
 
+export function formatTaskDate(value) {
+  const parts = parseDateParts(value);
+  if (!parts) return value;
+
+  const { day, month, year } = parts;
+  const date = new Date(year, month - 1, day);
+  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
+    return value;
+  }
+
+  const monthName = date.toLocaleString('en-GB', { month: 'long' });
+  const weekday = date.toLocaleString('en-GB', { weekday: 'long' });
+  return `${day} ${monthName}, ${weekday}`;
+}
+
 export default formatDate;

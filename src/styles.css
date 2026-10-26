@@ -421,6 +421,11 @@ h3 {
   padding: 13px 14px;
 }
 
+.task-table th:nth-child(n + 2),
+.task-table td:nth-child(n + 2) {
+  text-align: center;
+}
+
 .task-table td {
   color: #424852;
 }
