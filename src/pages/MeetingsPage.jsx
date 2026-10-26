@@ -1,3 +1,5 @@
+import formatDate from '../utils/date';
+
 function MeetingsPage({
   meetings,
   meetingForm,
@@ -34,7 +36,7 @@ function MeetingsPage({
             [...meetings].sort((a, b) => new Date(a.date) - new Date(b.date)).map((meeting) => (
               <div key={meeting.id} className="list-item">
                 <strong>{meeting.title}</strong>
-                <div className="muted">{meeting.date}</div>
+                <time className="muted" dateTime={meeting.date}>{formatDate(meeting.date)}</time>
                 {meeting.agenda ? <div className="muted">{meeting.agenda}</div> : null}
                 <button type="button" className="text-button" onClick={() => onDeleteMeeting(meeting.id)}>Delete</button>
               </div>

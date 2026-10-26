@@ -1,10 +1,6 @@
 import StatCard from '../components/StatCard';
 import FromYourReading from '../components/FromYourReading';
-
-function formatDashboardDate(date) {
-  const [year, month, day] = date.split('-');
-  return `${day}/${month}/${year}`;
-}
+import formatDate from '../utils/date';
 
 function DashboardPage({
   papers,
@@ -47,7 +43,7 @@ function DashboardPage({
           {nextMeeting ? (
             <div className="dashboard-meeting">
               <strong>{nextMeeting.title}</strong>
-              <time className="dashboard-date-badge meeting-date" dateTime={nextMeeting.date}>{formatDashboardDate(nextMeeting.date)}</time>
+              <time className="dashboard-date-badge meeting-date" dateTime={nextMeeting.date}>{formatDate(nextMeeting.date)}</time>
               <div className="muted">{nextMeeting.agenda}</div>
             </div>
           ) : (
@@ -64,12 +60,12 @@ function DashboardPage({
           </div>
           <div className="list">
             {outstandingTasks.length ? (
-              outstandingTasks.map((task) => (
+              outstandingTasks.slice(0, 3).map((task) => (
                 <div key={task.id} className="list-item">
-                  <strong>{task.title}</strong>
+                  <span className="dashboard-date-badge task-date">{task.title}</span>
                   {task.due_date
-                    ? <time className="dashboard-date-badge task-date" dateTime={task.due_date}>Due: {task.due_date}</time>
-                    : <span className="dashboard-date-badge no-date">No due date</span>}
+                    ? <time className="muted" dateTime={task.due_date}>Due: {formatDate(task.due_date, true)}</time>
+                    : <span className="muted">No due date</span>}
                 </div>
               ))
             ) : (

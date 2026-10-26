@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import formatDate from '../utils/date';
 
 function ProgressPage({
   roadmap,
@@ -81,7 +82,7 @@ function ProgressPage({
         </article>
         <article className="progress-summary-card">
           <span className="eyebrow">Upcoming deadline</span>
-          <strong>{upcomingDeadline?.due_date || 'No deadline set'}</strong>
+          <strong>{upcomingDeadline ? formatDate(upcomingDeadline.due_date) : 'No deadline set'}</strong>
           <span className="progress-summary-detail">{upcomingDeadline?.name || 'Add a due date to a milestone'}</span>
         </article>
       </section>
@@ -169,7 +170,7 @@ function ProgressPage({
                                         <strong>{milestone.name}</strong>
                                         <span className="muted">
                                           Weight {milestone.weight} · {taskCount} {taskCount === 1 ? 'task' : 'tasks'}
-                                          {milestone.due_date ? ` · Due ${milestone.due_date}` : ''}
+                                          {milestone.due_date ? ` · Due ${formatDate(milestone.due_date)}` : ''}
                                         </span>
                                       </span>
                                       <span className="milestone-summary-progress">{milestoneProgress}%</span>
@@ -201,7 +202,7 @@ function ProgressPage({
                                               <div className="roadmap-task-main">
                                                 <strong>{task.title}</strong>
                                                 {task.description ? <div className="muted">{task.description}</div> : null}
-                                                {task.due_date ? <div className="muted">Due: {task.due_date}</div> : null}
+                                                {task.due_date ? <div className="muted">Due: {formatDate(task.due_date)}</div> : null}
                                               </div>
                                               <div className="roadmap-task-controls">
                                                 <select
