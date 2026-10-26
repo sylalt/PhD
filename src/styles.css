@@ -441,6 +441,18 @@ h3 {
 .task-title {
   font-size: 15px;
   font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.task-title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.task-title-row > .task-description-details {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .task-description-details > summary {
@@ -468,10 +480,6 @@ h3 {
   color: #424852;
 }
 
-.task-description-content .task-milestone {
-  margin-top: 0;
-}
-
 .task-description {
   min-width: 220px;
   margin: 6px 0 2px;
@@ -483,18 +491,18 @@ h3 {
 }
 
 .task-milestone {
-  display: block;
-  margin-top: 5px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  border: 1px solid #e2e0dc;
+  border-radius: 999px;
+  padding: 2px 8px;
+  background: #fff;
   color: var(--color-muted);
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.45;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
   overflow-wrap: anywhere;
-}
-
-.task-milestone > span {
-  color: #555b64;
-  font-weight: 650;
 }
 
 .task-sheet-badge {

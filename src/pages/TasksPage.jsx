@@ -54,19 +54,21 @@ function TasksPage({
                 {filteredTasks.length ? filteredTasks.map((task) => (
                   <tr key={task.id}>
                     <td>
-                      {task.notes || task.milestone ? (
-                        <details className="task-description-details">
-                          <summary><span className="task-title">{task.title}</span></summary>
-                          <div className="task-description-content">
-                            {task.notes && <p className="task-description">{task.notes}</p>}
-                            {task.milestone && (
-                              <span className="task-milestone">{task.milestone.split(' - ')[0]}</span>
-                            )}
-                          </div>
-                        </details>
-                      ) : (
-                        <span className="task-title">{task.title}</span>
-                      )}
+                      <div className="task-title-row">
+                        {task.milestone && (
+                          <span className="task-milestone">{task.milestone.split(' - ')[0]}</span>
+                        )}
+                        {task.notes ? (
+                          <details className="task-description-details">
+                            <summary><span className="task-title">{task.title}</span></summary>
+                            <div className="task-description-content">
+                              <p className="task-description">{task.notes}</p>
+                            </div>
+                          </details>
+                        ) : (
+                          <span className="task-title">{task.title}</span>
+                        )}
+                      </div>
                     </td>
                     <td><span className={`task-sheet-badge status-${task.status.toLowerCase().replace(/\s+/g, '-')}`}>{task.status}</span></td>
                     <td><span className={`task-sheet-badge priority-${task.priority.toLowerCase()}`}>{task.priority}</span></td>
