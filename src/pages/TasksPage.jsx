@@ -57,6 +57,7 @@ function TasksPage({
                       {task.notes ? (
                         <details className="task-description-details">
                           <summary><strong>{task.title}</strong></summary>
+                          <span className="task-description-label">Notes (description)</span>
                           <p className="task-description">{task.notes}</p>
                         </details>
                       ) : (

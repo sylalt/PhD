@@ -453,9 +453,17 @@ h3 {
   border-radius: 2px;
 }
 
+.task-description-label {
+  display: block;
+  margin-top: 8px;
+  color: #555b64;
+  font-size: 12px;
+  font-weight: 650;
+}
+
 .task-description {
   min-width: 220px;
-  margin: 8px 0 2px;
+  margin: 3px 0 2px;
   color: var(--color-muted);
   font-size: 13px;
   line-height: 1.55;
