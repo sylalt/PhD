@@ -17,7 +17,7 @@ function doGet(e) {
       throw new Error('QUOTES needs a Quote column in the first row.');
     }
     if (sheetName === 'TASKS') {
-      var requiredHeaders = ['Task', 'Status', 'Priority', 'Due date', 'Category', 'Milestone', 'Notes'];
+      var requiredHeaders = ['Task', 'Status', 'Priority', 'Due date', 'Category', 'Milestone', 'Notes(description)'];
       var missingHeaders = requiredHeaders.filter(function (header) { return headers.indexOf(header) === -1; });
       if (missingHeaders.length) {
         throw new Error('TASKS is missing required columns: ' + missingHeaders.join(', ') + '.');

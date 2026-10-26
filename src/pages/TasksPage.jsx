@@ -33,13 +33,10 @@ function TasksPage({
       <div className="card task-table-card">
         <div className="card-head">
           <h2>Tasks</h2>
-          <a href="https://docs.google.com/spreadsheets/d/107Ej9K3Ztxl6EWqd7k8WtdaXhmXNRnT0tmeBni4V5iM/edit" target="_blank" rel="noreferrer">
-            Open Google Sheet ↗
-          </a>
         </div>
         {loading ? (
           <p className="empty" role="status">Loading tasks…</p>
-        ) : filteredTasks.length ? (
+        ) : (
           <div className="table-wrap">
             <table className="task-table">
               <thead>
@@ -49,27 +46,39 @@ function TasksPage({
                   <th scope="col">Priority</th>
                   <th scope="col">Due date</th>
                   <th scope="col">Category</th>
-                  <th scope="col">Milestone</th>
-                  <th scope="col">Notes</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredTasks.map((task) => (
+                {filteredTasks.length ? filteredTasks.map((task) => (
                   <tr key={task.id}>
-                    <td><strong>{task.title}</strong></td>
+                    <td>
+                      {task.notes ? (
+                        <details className="task-description-details">
+                          <summary><strong>{task.title}</strong></summary>
+                          <p className="task-description">{task.notes}</p>
+                        </details>
+                      ) : (
+                        <strong>{task.title}</strong>
+                      )}
+                      {task.milestone && (
+                        <span className="task-milestone"><span>Milestone:</span> {task.milestone}</span>
+                      )}
+                    </td>
                     <td><span className={`task-sheet-badge status-${task.status.toLowerCase().replace(/\s+/g, '-')}`}>{task.status}</span></td>
                     <td><span className={`task-sheet-badge priority-${task.priority.toLowerCase()}`}>{task.priority}</span></td>
                     <td>{task.due_date}</td>
                     <td>{task.category}</td>
-                    <td>{task.milestone}</td>
-                    <td className="task-notes">{task.notes}</td>
                   </tr>
-                ))}
+                )) : (
+                  <tr>
+                    <td colSpan="5" className="empty">
+                      {tasks.length ? 'No tasks match these filters.' : 'No tasks yet. Add tasks to the TASKS tab in Google Sheets.'}
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
-        ) : (
-          <p className="empty">{tasks.length ? 'No tasks match these filters.' : 'No tasks yet. Add tasks to the TASKS tab in Google Sheets.'}</p>
         )}
       </div>
     </section>
