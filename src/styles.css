@@ -438,6 +438,11 @@ h3 {
   color: var(--color-text);
 }
 
+.task-title {
+  font-size: 15px;
+  font-weight: 500;
+}
+
 .task-description-details > summary {
   display: flex;
   align-items: baseline;

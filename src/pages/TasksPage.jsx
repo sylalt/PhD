@@ -56,7 +56,7 @@ function TasksPage({
                     <td>
                       {task.notes || task.milestone ? (
                         <details className="task-description-details">
-                          <summary><strong>{task.title}</strong></summary>
+                          <summary><span className="task-title">{task.title}</span></summary>
                           <div className="task-description-content">
                             {task.milestone && (
                               <span className="task-milestone"><span>Milestone:</span> {task.milestone}</span>
@@ -65,7 +65,7 @@ function TasksPage({
                           </div>
                         </details>
                       ) : (
-                        <strong>{task.title}</strong>
+                        <span className="task-title">{task.title}</span>
                       )}
                     </td>
                     <td><span className={`task-sheet-badge status-${task.status.toLowerCase().replace(/\s+/g, '-')}`}>{task.status}</span></td>
