@@ -54,16 +54,18 @@ function TasksPage({
                 {filteredTasks.length ? filteredTasks.map((task) => (
                   <tr key={task.id}>
                     <td>
-                      {task.notes ? (
+                      {task.notes || task.milestone ? (
                         <details className="task-description-details">
                           <summary><strong>{task.title}</strong></summary>
-                          <p className="task-description">{task.notes}</p>
+                          <div className="task-description-content">
+                            {task.milestone && (
+                              <span className="task-milestone"><span>Milestone:</span> {task.milestone}</span>
+                            )}
+                            {task.notes && <p className="task-description">{task.notes}</p>}
+                          </div>
                         </details>
                       ) : (
                         <strong>{task.title}</strong>
-                      )}
-                      {task.milestone && (
-                        <span className="task-milestone"><span>Milestone:</span> {task.milestone}</span>
                       )}
                     </td>
                     <td><span className={`task-sheet-badge status-${task.status.toLowerCase().replace(/\s+/g, '-')}`}>{task.status}</span></td>
