@@ -439,18 +439,28 @@ h3 {
 }
 
 .task-description-details > summary {
+  display: flex;
+  align-items: baseline;
+  color: #424852;
   cursor: pointer;
-  text-underline-offset: 3px;
+  list-style: none;
 }
 
-.task-description-details > summary:hover {
-  color: var(--color-lavender-ink);
+.task-description-details > summary::-webkit-details-marker {
+  display: none;
 }
 
 .task-description-details > summary:focus-visible {
   outline: 2px solid var(--color-lavender-ink);
   outline-offset: 3px;
   border-radius: 2px;
+}
+
+.task-description-details[open] > .task-description {
+  margin: 10px 0 2px 7px;
+  padding-left: 12px;
+  border-left: 1px solid #e2e0dc;
+  color: #424852;
 }
 
 .task-description {
